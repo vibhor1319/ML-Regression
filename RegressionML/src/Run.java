@@ -6,7 +6,13 @@ public class Run {
 		// TODO Auto-generated method stub
 
 		// TODO Auto-generated method stub
-		runLasso();
+		//runLasso();
+		runNN();
+	}
+	
+	public static void runNN()
+	{
+		
 	}
 
 	public static void runLasso() {
