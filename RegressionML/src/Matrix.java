@@ -157,5 +157,14 @@ public class Matrix {
 				y[j] += a[i][j] * x[i];
 		return y;
 	}
+	
+	public static double RSS(double[] a, double[] b)
+	{
+		double RSS= 0.0;
+		for (int i = 0; i < b.length; i++) {
+			RSS= RSS + Math.pow(a[i]-b[i], 2);
+		}
+		return Math.sqrt(RSS);
+	}
 
 }

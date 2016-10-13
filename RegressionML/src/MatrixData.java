@@ -10,6 +10,7 @@ public class MatrixData {
 	
 	HashMap<String,double[]> dynamic_matrix = new HashMap<String, double[]>();
 	HashMap<String,double[]> normalized_dynamic_matrix = new HashMap<String, double[]>();
+	HashMap<String,Double> normalized_norm_value = new HashMap<String, Double>();
 	public double[][] getMatrix() {
 		return matrix;
 	}
@@ -70,29 +71,57 @@ public class MatrixData {
 		{
 			String column = each.getKey();
 			//double value = Math.sqrt(Arrays.stream(dynamic_matrix.get(column)).sum());
-			
+			//System.out.println(value);
 		//	double[] normalizedArray = Arrays.stream(dynamic_matrix.get(column)).map(map -> (map / value)).toArray();
-			normalized_dynamic_matrix.put(column, normalize_features(dynamic_matrix.get(column)));
+			normalized_dynamic_matrix.put(column, normalize_features(column,dynamic_matrix.get(column)));
 			//System.out.println(column + " : "+ Arrays.toString(normalizedArray));
 		}
 	}
 	
-	public double[] normalize_features(double[] features) {
+	public double[] normalize_features(String column,double[] features) {
 		double normalized[] = new double[features.length];
 		double normalizationDeno = 0.0;
 		for (int i = 0; i < features.length; i++) {
 			normalizationDeno = normalizationDeno + Math.pow(features[i], 2);
 
 		}
-		System.out.println(normalizationDeno);
+		//System.out.println(normalizationDeno);
 		normalizationDeno = Math.sqrt(normalizationDeno);
-		System.out.println(normalizationDeno);
+		normalized_norm_value.put(column, normalizationDeno);
+		//System.out.println(normalizationDeno);
 		for (int i = 0; i < normalized.length; i++) {
 			normalized[i] = features[i] / normalizationDeno;
 		}
 
 		return normalized;
 
+	}
+	
+	public double[] normalize_features(String column, double[] features, Double norm)
+	{
+		double normalized[] = new double[features.length];
+		double normalizationDeno = norm;
+		
+		normalized_norm_value.put(column, normalizationDeno);
+		//System.out.println(normalizationDeno);
+		for (int i = 0; i < normalized.length; i++) {
+			normalized[i] = features[i] / normalizationDeno;
+		}
+
+		return normalized;
+	}
+	
+	public void convertToNormalizeHashMap(MatrixData md)
+	{
+		for(Entry<String, double[]> each: dynamic_matrix.entrySet())
+		{
+			String column = each.getKey();
+			//double value = Math.sqrt(Arrays.stream(dynamic_matrix.get(column)).sum());
+			//System.out.println(value);
+		//	double[] normalizedArray = Arrays.stream(dynamic_matrix.get(column)).map(map -> (map / value)).toArray();
+			normalized_dynamic_matrix.put(column, normalize_features(column,dynamic_matrix.get(column),md.normalized_norm_value.get(column)));
+			//System.out.println(column + " : "+ Arrays.toString(normalizedArray));
+		}
 	}
 	
 	

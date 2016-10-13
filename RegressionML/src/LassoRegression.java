@@ -10,7 +10,7 @@ public class LassoRegression {
 		Arrays.fill(constant_array, 1);
 		md.dynamic_matrix.put("constant", constant_array);
 		md.addElement("constant");
-		md.normalized_dynamic_matrix.put("constant", normalize_features(constant_array));
+		md.normalized_dynamic_matrix.put("constant", md.normalize_features("constant",constant_array));
 
 		String features_new[] = new String[features.length + 1];
 		for (int i = 1; i <= features.length; i++) {
