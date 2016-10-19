@@ -90,6 +90,8 @@ public class MatrixData {
 		}
 	}
 	
+	
+	
 	public void convertToNormalizeHashMap()
 	{
 		for(Entry<String, double[]> each: dynamic_matrix.entrySet())
