@@ -164,7 +164,7 @@ public class Matrix {
 		for (int i = 0; i < b.length; i++) {
 			RSS= RSS + Math.pow(a[i]-b[i], 2);
 		}
-		return Math.sqrt(RSS);
+		return RSS;
 	}
 
 }

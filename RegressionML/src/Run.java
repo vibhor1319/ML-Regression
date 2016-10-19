@@ -85,7 +85,7 @@ public class Run {
 		
 		for (int i = 1; i <= 16; i++) {
 			double[] predicted = reg.compute_distances_k_all(i, simple_feature_matrix_m, simple_feature_matrix_validation, dataTrain.dynamic_matrix.get("price"));
-			System.out.println(Arrays.toString(predicted));
+			//System.out.println(Arrays.toString(predicted));
 			double RSS = Matrix.RSS(predicted, dataValidation.dynamic_matrix.get("price"));
 			
 			System.out.println("RSS " + RSS + " k "+i);
