@@ -1,3 +1,4 @@
+package core;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -6,6 +7,30 @@ import java.util.Map.Entry;
 public class MatrixData {
 
 	double [][] matrix ;
+	public double[][] getColumnMatrix() {
+		return columnMatrix;
+	}
+	public void setColumnMatrix(double[][] columnMatrix) {
+		this.columnMatrix = columnMatrix;
+	}
+	public HashMap<String, double[]> getDynamic_matrix() {
+		return dynamic_matrix;
+	}
+	public void setDynamic_matrix(HashMap<String, double[]> dynamic_matrix) {
+		this.dynamic_matrix = dynamic_matrix;
+	}
+	public HashMap<String, double[]> getNormalized_dynamic_matrix() {
+		return normalized_dynamic_matrix;
+	}
+	public void setNormalized_dynamic_matrix(HashMap<String, double[]> normalized_dynamic_matrix) {
+		this.normalized_dynamic_matrix = normalized_dynamic_matrix;
+	}
+	public HashMap<String, Double> getNormalized_norm_value() {
+		return normalized_norm_value;
+	}
+	public void setNormalized_norm_value(HashMap<String, Double> normalized_norm_value) {
+		this.normalized_norm_value = normalized_norm_value;
+	}
 	double [][] columnMatrix;
 	
 	HashMap<String,double[]> dynamic_matrix = new HashMap<String, double[]>();

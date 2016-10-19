@@ -1,16 +1,20 @@
+package regression;
 import java.lang.reflect.Array;
 import java.util.Arrays;
 import java.util.LinkedHashMap;
 import java.util.LinkedList;
 
+import core.MatrixData;
+import core.Pair;
+
 public class NearestNeighbor {
 
 	public double[][] get_numpy_data(MatrixData md, String features[], String output) {
-		double constant_array[] = new double[md.matrix.length];
+		double constant_array[] = new double[md.getMatrix().length];
 		Arrays.fill(constant_array, 1);
-		md.dynamic_matrix.put("constant", constant_array);
+		md.getDynamic_matrix().put("constant", constant_array);
 		md.addElement("constant");
-		md.normalized_dynamic_matrix.put("constant", normalize_features(constant_array));
+		md.getNormalized_dynamic_matrix().put("constant", normalize_features(constant_array));
 
 		String features_new[] = new String[features.length + 1];
 		for (int i = 1; i <= features.length; i++) {
@@ -96,11 +100,11 @@ public class NearestNeighbor {
 	}
 	
 	public double[][] get_numpy_data(MatrixData md, String features[], String output,MatrixData md1) {
-		double constant_array[] = new double[md.matrix.length];
+		double constant_array[] = new double[md.getMatrix().length];
 		Arrays.fill(constant_array, 1);
-		md.dynamic_matrix.put("constant", constant_array);
+		md.getDynamic_matrix().put("constant", constant_array);
 		md.addElement("constant");
-		md.normalized_dynamic_matrix.put("constant", normalize_features(constant_array));
+		md.getNormalized_dynamic_matrix().put("constant", normalize_features(constant_array));
 
 		String features_new[] = new String[features.length + 1];
 		for (int i = 1; i <= features.length; i++) {

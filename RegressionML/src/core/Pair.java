@@ -1,3 +1,4 @@
+package core;
 public class Pair implements Comparable<Pair> {
     public final int index;
     public final double value;

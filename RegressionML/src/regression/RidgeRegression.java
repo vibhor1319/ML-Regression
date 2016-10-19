@@ -1,12 +1,16 @@
+package regression;
 import java.util.Arrays;
+
+import core.Matrix;
+import core.MatrixData;
 
 public class RidgeRegression {
 
 	public  double[][] get_numpy_data(MatrixData md, String features[], String output)
 	{
-		double constant_array[] = new double[md.matrix.length];
+		double constant_array[] = new double[md.getMatrix().length];
 		Arrays.fill(constant_array, 1);
-		md.dynamic_matrix.put("constant", constant_array);
+		md.getDynamic_matrix().put("constant", constant_array);
 		md.addElement("constant");
 		
 		String features_new [] = new String[features.length+1];
@@ -58,7 +62,7 @@ public class RidgeRegression {
 				else{
 					feature_is_constant = false;
 				}
-				double derivative=feature_derivative_ridge(error, dataTrain.dynamic_matrix.get(featureNames[i]), final_weights[i], l2_penalty, feature_is_constant);
+				double derivative=feature_derivative_ridge(error, dataTrain.getDynamic_matrix().get(featureNames[i]), final_weights[i], l2_penalty, feature_is_constant);
 				//gRSS = gRSS + Math.pow(derivative, 2);
 				//double d = initial_weights[i];
 				final_weights[i] = final_weights[i] - step_size*derivative;

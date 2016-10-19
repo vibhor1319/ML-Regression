@@ -1,4 +1,9 @@
+package regression;
 import java.util.Arrays;
+
+import core.Matrix;
+import core.MatrixData;
+import core.MatrixFormulation;
 
 public class Regression {
 	
@@ -40,11 +45,11 @@ public class Regression {
 //		}
 //		//System.out.println(dataTrain.columnMatrix[i]);
 		//System.out.println(dataTrain.columnMatrix[j]);
-		reg.simple_linear_regression(dataTrain.columnMatrix[i], dataTrain.columnMatrix[j]);
+		reg.simple_linear_regression(dataTrain.getColumnMatrix()[i], dataTrain.getColumnMatrix()[j]);
 		double specific_value_sqft[] = {2650.0};
 		double output[] = reg.get_regression_predictions(specific_value_sqft, reg.intercept,reg.slope);
 		System.out.println(Arrays.toString(output));
-		double RSS = reg.get_residual_sum_of_squares(dataTrain.columnMatrix[i], dataTrain.columnMatrix[j], reg.slope, reg.intercept);
+		double RSS = reg.get_residual_sum_of_squares(dataTrain.getColumnMatrix()[i], dataTrain.getColumnMatrix()[j], reg.slope, reg.intercept);
 		System.out.println(RSS);
 		double specific_value_price[] = {800000};
 		double input_array[] = reg.inverse_regression_predictions(specific_value_price, reg.intercept, reg.slope);
@@ -52,51 +57,51 @@ public class Regression {
 		int k = reg.columnNo(dataTrain,"bedrooms");
 		
 
-		reg.simple_linear_regression(dataTest.columnMatrix[i], dataTest.columnMatrix[j]);
+		reg.simple_linear_regression(dataTest.getColumnMatrix()[i], dataTest.getColumnMatrix()[j]);
 		//double specific_value_sqft[] = {2650.0};
 		//double output[] = reg.get_regression_predictions(specific_value_sqft, reg.intercept,reg.slope);
 		//System.out.println(Arrays.toString(output));
-		double RSS_sqft = reg.get_residual_sum_of_squares(dataTest.columnMatrix[i], dataTest.columnMatrix[j], reg.slope, reg.intercept);
+		double RSS_sqft = reg.get_residual_sum_of_squares(dataTest.getColumnMatrix()[i], dataTest.getColumnMatrix()[j], reg.slope, reg.intercept);
 		System.out.println(RSS_sqft);
-		reg.simple_linear_regression(dataTest.columnMatrix[k], dataTest.columnMatrix[j]);
+		reg.simple_linear_regression(dataTest.getColumnMatrix()[k], dataTest.getColumnMatrix()[j]);
 		//double specific_value_sqft[] = {2650.0};
 		//double output[] = reg.get_regression_predictions(specific_value_sqft, reg.intercept,reg.slope);
 		//System.out.println(Arrays.toString(output));
-		double RSS_bedroom = reg.get_residual_sum_of_squares(dataTest.columnMatrix[k], dataTest.columnMatrix[j], reg.slope, reg.intercept);
+		double RSS_bedroom = reg.get_residual_sum_of_squares(dataTest.getColumnMatrix()[k], dataTest.getColumnMatrix()[j], reg.slope, reg.intercept);
 		System.out.println(RSS_bedroom);
 		
 		
 		//########### Week 2
 		int p = reg.columnNo(dataTrain,"bathrooms");
-		dataTrain.dynamic_matrix.put("bedrooms_squared", reg.multiply_column_matrix(dataTrain.columnMatrix[k],dataTrain.columnMatrix[k]));
+		dataTrain.getDynamic_matrix().put("bedrooms_squared", reg.multiply_column_matrix(dataTrain.getColumnMatrix()[k],dataTrain.getColumnMatrix()[k]));
 		
 		//reg.multiply_column_matrix(dataTest.columnMatrix[k],dataTest.columnMatrix[k]);
-		dataTest.dynamic_matrix.put("bedrooms_squared", reg.multiply_column_matrix(dataTest.columnMatrix[k],dataTest.columnMatrix[k]));
+		dataTest.getDynamic_matrix().put("bedrooms_squared", reg.multiply_column_matrix(dataTest.getColumnMatrix()[k],dataTest.getColumnMatrix()[k]));
 		
-		dataTrain.dynamic_matrix.put("bed_bath_rooms", reg.multiply_column_matrix(dataTrain.columnMatrix[k],dataTrain.columnMatrix[p]));
+		dataTrain.getDynamic_matrix().put("bed_bath_rooms", reg.multiply_column_matrix(dataTrain.getColumnMatrix()[k],dataTrain.getColumnMatrix()[p]));
 		
 		//reg.multiply_column_matrix(dataTest.columnMatrix[k],dataTest.columnMatrix[k]);
-		dataTest.dynamic_matrix.put("bed_bath_rooms", reg.multiply_column_matrix(dataTest.columnMatrix[k],dataTest.columnMatrix[p]));
+		dataTest.getDynamic_matrix().put("bed_bath_rooms", reg.multiply_column_matrix(dataTest.getColumnMatrix()[k],dataTest.getColumnMatrix()[p]));
 		
 			
-		dataTrain.dynamic_matrix.put("log_sqft_living", reg.logArray(dataTrain.columnMatrix[i]));
+		dataTrain.getDynamic_matrix().put("log_sqft_living", reg.logArray(dataTrain.getColumnMatrix()[i]));
 		
 		//reg.multiply_column_matrix(dataTest.columnMatrix[k],dataTest.columnMatrix[k]);
-		dataTest.dynamic_matrix.put("log_sqft_living", reg.logArray(dataTest.columnMatrix[i]));
+		dataTest.getDynamic_matrix().put("log_sqft_living", reg.logArray(dataTest.getColumnMatrix()[i]));
 		
 		int latIndex = reg.columnNo(dataTrain,"lat");
 		int longIndex = reg.columnNo(dataTrain,"long");
-dataTrain.dynamic_matrix.put("lat_plus_long", reg.add_column_matrix(dataTrain.columnMatrix[latIndex],dataTrain.columnMatrix[longIndex]));
+dataTrain.getDynamic_matrix().put("lat_plus_long", reg.add_column_matrix(dataTrain.getColumnMatrix()[latIndex],dataTrain.getColumnMatrix()[longIndex]));
 		
 		//reg.multiply_column_matrix(dataTest.columnMatrix[k],dataTest.columnMatrix[k]);
-		dataTest.dynamic_matrix.put("lat_plus_long", reg.add_column_matrix(dataTest.columnMatrix[latIndex],dataTrain.columnMatrix[longIndex]));
+		dataTest.getDynamic_matrix().put("lat_plus_long", reg.add_column_matrix(dataTest.getColumnMatrix()[latIndex],dataTrain.getColumnMatrix()[longIndex]));
 		
-		System.out.println(reg.meanAverage(dataTest.dynamic_matrix.get("bedrooms_squared")));
-		System.out.println(reg.meanAverage(dataTest.dynamic_matrix.get("bed_bath_rooms")));
-		System.out.println(reg.meanAverage(dataTest.dynamic_matrix.get("log_sqft_living")));
-		System.out.println(reg.meanAverage(dataTest.dynamic_matrix.get("lat_plus_long")));
-		System.out.println("Completed");
-		
+//		System.out.println(reg.meanAverage(dataTest.dynamic_matrix.get("bedrooms_squared")));
+//		System.out.println(reg.meanAverage(dataTest.dynamic_matrix.get("bed_bath_rooms")));
+//		System.out.println(reg.meanAverage(dataTest.dynamic_matrix.get("log_sqft_living")));
+//		System.out.println(reg.meanAverage(dataTest.dynamic_matrix.get("lat_plus_long")));
+//		System.out.println("Completed");
+//		
 		
 		String simple_features[] = {"sqft_living"};
 				String my_output= "price";
@@ -111,7 +116,7 @@ dataTrain.dynamic_matrix.put("lat_plus_long", reg.add_column_matrix(dataTrain.co
 					
 				}
 				simple_features_extended[0] = "constant";
-				double final_weights[] =reg.regression_gradient_descent(simple_features_extended,dataTrain,simple_feature_matrix, dataTrain.dynamic_matrix.get("price"),initial_weights, step_size,tolerance);
+				double final_weights[] =reg.regression_gradient_descent(simple_features_extended,dataTrain,simple_feature_matrix, dataTrain.getDynamic_matrix().get("price"),initial_weights, step_size,tolerance);
 		//System.out.println(Arrays.toString(final_weights));
 		
 		
@@ -123,7 +128,7 @@ dataTrain.dynamic_matrix.put("lat_plus_long", reg.add_column_matrix(dataTrain.co
 				double[][] simple_feature_matrix_test = reg.get_numpy_data(dataTest, simple_features, my_output);
 				double[] predictedOutput = reg.predict_outcome(simple_feature_matrix_test, final_weights);
 				//System.out.println(Arrays.toString(predictedOutput));
-				double RSSTest  = reg.computeRSS(dataTest.dynamic_matrix.get("price"), predictedOutput);
+				double RSSTest  = reg.computeRSS(dataTest.getDynamic_matrix().get("price"), predictedOutput);
 		System.out.println(RSSTest);
 		
 		
@@ -146,7 +151,7 @@ dataTrain.dynamic_matrix.put("lat_plus_long", reg.add_column_matrix(dataTrain.co
 					
 				}
 				simple_features_extended_m[0] = "constant";
-				double final_weights_m[] =reg.regression_gradient_descent(simple_features_extended_m,dataTrain,simple_feature_matrix_m, dataTrain.dynamic_matrix.get("price"),initial_weights_m, step_size_m,tolerance_m);
+				double final_weights_m[] =reg.regression_gradient_descent(simple_features_extended_m,dataTrain,simple_feature_matrix_m, dataTrain.getDynamic_matrix().get("price"),initial_weights_m, step_size_m,tolerance_m);
 		//System.out.println(Arrays.toString(final_weights_m));
 		
 		
@@ -158,7 +163,7 @@ dataTrain.dynamic_matrix.put("lat_plus_long", reg.add_column_matrix(dataTrain.co
 				double[][] simple_feature_matrix_test_m = reg.get_numpy_data(dataTest, simple_features_m, my_output_m);
 				double[] predictedOutput_m = reg.predict_outcome(simple_feature_matrix_test_m, final_weights_m);
 				//System.out.println(Arrays.toString(predictedOutput_m));
-				double RSSTest_m  = reg.computeRSS(dataTest.dynamic_matrix.get("price"), predictedOutput_m);
+				double RSSTest_m  = reg.computeRSS(dataTest.getDynamic_matrix().get("price"), predictedOutput_m);
 		System.out.println(RSSTest_m);
 		
 		
@@ -192,9 +197,9 @@ dataTrain.dynamic_matrix.put("lat_plus_long", reg.add_column_matrix(dataTrain.co
 	
 	public  double[][] get_numpy_data(MatrixData md, String features[], String output)
 	{
-		double constant_array[] = new double[md.matrix.length];
+		double constant_array[] = new double[md.getMatrix().length];
 		Arrays.fill(constant_array, 1);
-		md.dynamic_matrix.put("constant", constant_array);
+		md.getDynamic_matrix().put("constant", constant_array);
 		md.addElement("constant");
 		
 		String features_new [] = new String[features.length+1];
@@ -229,7 +234,7 @@ dataTrain.dynamic_matrix.put("lat_plus_long", reg.add_column_matrix(dataTrain.co
 		double error[] = Matrix.subtract(predict, output);
 		double gRSS = 0.0;
 			for (int i = 0; i < initial_weights.length; i++) {
-				double derivative=feature_derivative(error, dataTrain.dynamic_matrix.get(featureNames[i]));
+				double derivative=feature_derivative(error, dataTrain.getDynamic_matrix().get(featureNames[i]));
 				gRSS = gRSS + Math.pow(derivative, 2);
 				//double d = initial_weights[i];
 				final_weights[i] = final_weights[i] - step_size*derivative;
@@ -282,9 +287,9 @@ dataTrain.dynamic_matrix.put("lat_plus_long", reg.add_column_matrix(dataTrain.co
 	public int columnNo(MatrixData matrix, String columnName)
 	{
 		int i =0;
-		for(i=0;i<matrix.columnHeaders.length;i++)
+		for(i=0;i<matrix.getColumnHeaders().length;i++)
 		{
-			if(matrix.columnHeaders[i].equals(columnName))
+			if(matrix.getColumnHeaders()[i].equals(columnName))
 			{
 				break;
 			}

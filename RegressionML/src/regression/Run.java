@@ -1,4 +1,10 @@
+package regression;
 import java.util.Arrays;
+
+import core.Matrix;
+import core.MatrixData;
+import core.MatrixFormulation;
+import core.Pair;
 
 public class Run {
 
@@ -59,8 +65,8 @@ public class Run {
 		System.out.println(Arrays.stream(distances).min().getAsDouble());
 		System.out.println(distances[382]);
 		System.out.println(Arrays.toString(simple_feature_matrix_test[382]));
-		System.out.println(dataTest.dynamic_matrix.get("price")[382]);
-		System.out.println(dataTrain.dynamic_matrix.get("price")[382]);
+		System.out.println(dataTest.getDynamic_matrix().get("price")[382]);
+		System.out.println(dataTrain.getDynamic_matrix().get("price")[382]);
 		
 		Pair index[] = reg.compute_k_nearest_neighbors(4,simple_feature_matrix_m,simple_feature_matrix_test[2]);
 		//System.out.println(Arrays.toString(distances));
@@ -69,7 +75,7 @@ public class Run {
 				
 		}
 		
-		double avgValue = reg.compute_distances_k_avg(4,simple_feature_matrix_m,simple_feature_matrix_test[2],dataTrain.dynamic_matrix.get("price"));
+		double avgValue = reg.compute_distances_k_avg(4,simple_feature_matrix_m,simple_feature_matrix_test[2],dataTrain.getDynamic_matrix().get("price"));
 		System.out.println(avgValue);
 		
 		
@@ -79,14 +85,14 @@ public class Run {
 		}
 		
 		
-		double[] predictedValue = reg.compute_distances_k_all(10, simple_feature_matrix_m, newArray, dataTrain.dynamic_matrix.get("price"));
+		double[] predictedValue = reg.compute_distances_k_all(10, simple_feature_matrix_m, newArray, dataTrain.getDynamic_matrix().get("price"));
 		
 		System.out.println(Arrays.toString(predictedValue));
 		
 		for (int i = 1; i <= 16; i++) {
-			double[] predicted = reg.compute_distances_k_all(i, simple_feature_matrix_m, simple_feature_matrix_validation, dataTrain.dynamic_matrix.get("price"));
+			double[] predicted = reg.compute_distances_k_all(i, simple_feature_matrix_m, simple_feature_matrix_validation, dataTrain.getDynamic_matrix().get("price"));
 			//System.out.println(Arrays.toString(predicted));
-			double RSS = Matrix.RSS(predicted, dataValidation.dynamic_matrix.get("price"));
+			double RSS = Matrix.RSS(predicted, dataValidation.getDynamic_matrix().get("price"));
 			
 			System.out.println("RSS " + RSS + " k "+i);
 		}
@@ -131,7 +137,7 @@ public class Run {
 //		double[] simple_weights_low_penalty = reg.regression_gradient_descent(simple_features_extended, dataTrain,
 //				simple_feature_matrix_m, dataTrain.dynamic_matrix.get("price"), initial_weights, step_size, l2_penalty,
 //				max_iterations);
-		double[] final_weight = reg.lasso_cyclical_coordinate_descent(simple_features_extended, dataTrain, simple_feature_matrix_m, dataTrain.dynamic_matrix.get("price"), initial_weights, l1_penalty, tolerance);
+		double[] final_weight = reg.lasso_cyclical_coordinate_descent(simple_features_extended, dataTrain, simple_feature_matrix_m, dataTrain.getDynamic_matrix().get("price"), initial_weights, l1_penalty, tolerance);
 		System.out.println(Arrays.toString(final_weight));
 	}
 
@@ -168,11 +174,11 @@ public class Run {
 		}
 		simple_features_extended[0] = "constant";
 		double[] simple_weights_low_penalty = reg.regression_gradient_descent(simple_features_extended, dataTrain,
-				simple_feature_matrix_m, dataTrain.dynamic_matrix.get("price"), initial_weights, step_size, l2_penalty,
+				simple_feature_matrix_m, dataTrain.getDynamic_matrix().get("price"), initial_weights, step_size, l2_penalty,
 				max_iterations);
 		l2_penalty = 1e11;
 		double[] simple_weights_high_penalty = reg.regression_gradient_descent(simple_features_extended, dataTrain,
-				simple_feature_matrix_m, dataTrain.dynamic_matrix.get("price"), initial_weights, step_size, l2_penalty,
+				simple_feature_matrix_m, dataTrain.getDynamic_matrix().get("price"), initial_weights, step_size, l2_penalty,
 				max_iterations);
 		System.out.println(Arrays.toString(simple_weights_low_penalty));
 		System.out.println(Arrays.toString(simple_weights_high_penalty));

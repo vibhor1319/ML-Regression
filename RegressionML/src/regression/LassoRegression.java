@@ -1,16 +1,20 @@
+package regression;
 import java.util.Arrays;
 import java.util.OptionalDouble;
 
+import core.Matrix;
+import core.MatrixData;
+import core.*;
 
 
 public class LassoRegression {
 
 	public double[][] get_numpy_data(MatrixData md, String features[], String output) {
-		double constant_array[] = new double[md.matrix.length];
+		double constant_array[] = new double[md.getMatrix().length];
 		Arrays.fill(constant_array, 1);
-		md.dynamic_matrix.put("constant", constant_array);
+		md.getDynamic_matrix().put("constant", constant_array);
 		md.addElement("constant");
-		md.normalized_dynamic_matrix.put("constant", md.normalize_features("constant",constant_array));
+		md.getNormalized_dynamic_matrix().put("constant", md.normalize_features("constant",constant_array));
 
 		String features_new[] = new String[features.length + 1];
 		for (int i = 1; i <= features.length; i++) {
@@ -65,8 +69,8 @@ public class LassoRegression {
 
 		double ro_i = 0.0;
 		double prediction[] = predict_outcome(feature_matrix, weights);
-		ro_i = Matrix.multiply(md.normalized_dynamic_matrix.get(feature), Matrix.addColumnWise(Matrix.subtract(output, prediction),
-				Matrix.scalarMultiply(md.normalized_dynamic_matrix.get(feature), weights[feature_no])));
+		ro_i = Matrix.multiply(md.getNormalized_dynamic_matrix().get(feature), Matrix.addColumnWise(Matrix.subtract(output, prediction),
+				Matrix.scalarMultiply(md.getNormalized_dynamic_matrix().get(feature), weights[feature_no])));
 		double new_weight = 0.0;
 		if (feature.equals("constant")) {
 			new_weight = ro_i;
