@@ -32,7 +32,7 @@ public class MatrixData {
 		this.normalized_norm_value = normalized_norm_value;
 	}
 	double [][] columnMatrix;
-	
+	String columnHeaders[];
 	HashMap<String,double[]> dynamic_matrix = new HashMap<String, double[]>();
 	HashMap<String,double[]> normalized_dynamic_matrix = new HashMap<String, double[]>();
 	HashMap<String,Double> normalized_norm_value = new HashMap<String, Double>();
@@ -48,7 +48,7 @@ public class MatrixData {
 	public void setColumnHeaders(String[] columnHeaders) {
 		this.columnHeaders = columnHeaders;
 	}
-	String columnHeaders[];
+	
 	
 	public double[][] convertToRow(double[][] mat)
 	{
