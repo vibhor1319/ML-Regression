@@ -89,6 +89,15 @@ public class MatrixFormulation {
        LinkedList<String[]> dataTest = new LinkedList<String[]>();
        HashMap<String, MatrixDataString> testTrain = new HashMap<String, MatrixDataString>();
        String[][] csvMatrixTrain =  null, csvMatrixTest = null;
+       HashMap<Integer, String> name = new HashMap<Integer, String>();
+       HashMap<Integer, String> review = new HashMap<Integer,String>();
+       HashMap<Integer, Integer> rating = new HashMap<Integer, Integer>();
+       HashMap<Integer, String> reviewClean = new HashMap<Integer, String>();
+       HashMap<Integer, Integer> sentiment = new HashMap<Integer, Integer>();
+       HashMap<Integer, HashMap<String, Integer>> wordCount = new HashMap<Integer, HashMap<String, Integer>>();
+       
+       
+       
        try {
     	   //BufferedReader br = new BufferedReader("/home/ankita/coursera/ml/classification/week1/module-2-assignment-train-idx.json");  
     	   BufferedReader br1 = new BufferedReader(new FileReader(path));  
@@ -106,7 +115,7 @@ public class MatrixFormulation {
            br = new BufferedReader(new FileReader("/home/ankita/coursera/ml/classification/week1/amazon_baby.csv"));
            String columnNames = br.readLine();
            String [] headings = columnNames.split(cvsSplitBy);
-           String[] newHeadings = new String[headings.length +2];
+           String[] newHeadings = new String[headings.length +3];
            System.arraycopy(headings, 0, newHeadings, 0, headings.length);
            //newHeadings = Arrays.copyOfRange(headings, 0, headings.length);
            newHeadings[headings.length] = "review_clean";
@@ -116,36 +125,30 @@ public class MatrixFormulation {
 
                // use comma as separator
                String[] features = new String[newHeadings.length];
-               
-               System.arraycopy(line.split(cvsSplitBy, -1), 0, features, 0,headings.length );;
-               
-               //System.out.println(i);
-               if(Double.parseDouble(features[2]) != 3)
+               name.put(i, features[0]);
+               if(features[1].trim() == "" )
                {
-            	   features[headings.length] = remove_punctuation(features[1]);
-            	   if(Double.parseDouble(features[2]) >=4)
-            	   {
-            		   features[headings.length+1] = "1";
-            	   }
-            	   else
-            	   {
-            		   features[headings.length+1] = "-1";
-            		   
-            	   }
-            	   
-            	   if(features[1].trim() == "")
-            	   {
-            		   features[1] = "N/A";
-            	   }
-            	   
-            	   
-                   //data.add(features);
-                   //double[] feature_double = doubleTypeArray(feas);
-                   //System.out.println(feature_double);
-                   
-                   data.add(features);
+            	   review.put(i, "N/A");
                }
-             
+               else
+               {
+            	   review.put(i, features[1]);
+               }
+              
+               rating.put(i, Integer.parseInt(features[2]));
+               reviewClean.put(i, remove_punctuation(features[1]));
+               if(Double.parseDouble(features[2]) >=4)
+        	   {
+            	   sentiment.put(i, 1);
+        		   
+        	   }
+        	   else
+        	   {
+            	   sentiment.put(i, -1);
+        	   }
+               
+               
+               
                //System.out.println("Country [code= " + country[4] + " , name=" + country[5] + "]");
                i++;
            }
