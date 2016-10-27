@@ -18,12 +18,20 @@ public class Run {
 		String pathTest = "/home/ankita/coursera/ml/classification/week1/module-2-assignment-test-idx.json";
 		String pathTrain = "/home/ankita/coursera/ml/classification/week1/module-2-assignment-train-idx.json";
 		HashMap<String,MatrixDataString> trainTest = mfTrainTest
-				.readCSVClassification(pathTrain,pathTest);
+				.readCSVClassification("","");
 		MatrixDataString dataTrain = trainTest.get("train");
-		MatrixDataString dataTest = trainTest.get("test");
+		//MatrixDataString dataTest = trainTest.get("test");
+		
+		int perfect_count = 0;
+		for (HashMap<String,Integer> iterable_element : dataTrain.getWordCount().values()) {
+			if(iterable_element.containsKey("perfect"))
+			{
+			perfect_count++;	
+			}
+		}
 		
 		
-		
+		System.out.println(perfect_count);
 		
 		
 		

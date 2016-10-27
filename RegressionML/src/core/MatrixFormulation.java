@@ -82,6 +82,9 @@ public class MatrixFormulation {
 		 MatrixDataString matrixTrain = new MatrixDataString();
        BufferedReader br = null;
        String line = "";
+       HashSet<Integer> train = null;
+       HashSet<Integer> test = null;
+       HashSet<String> importantWords = null;
        String cvsSplitBy = ",(?=([^\"]*\"[^\"]*\")*[^\"]*$)";
        //String[][] data = new String[][];
        HashMap<String, HashMap<Integer,Object>> trainColumns = new HashMap<String,HashMap<Integer, Object>>();
@@ -90,6 +93,7 @@ public class MatrixFormulation {
        LinkedList<String[]> dataTest = new LinkedList<String[]>();
        HashMap<String, MatrixDataString> testTrain = new HashMap<String, MatrixDataString>();
        String[][] csvMatrixTrain =  null, csvMatrixTest = null;
+       boolean filterRows = true;
 //       HashMap<Integer, String> name = new HashMap<Integer, String>();
 //       HashMap<Integer, String> review = new HashMap<Integer,String>();
 //       HashMap<Integer, Integer> rating = new HashMap<Integer, Integer>();
@@ -107,19 +111,41 @@ public class MatrixFormulation {
        
        try {
     	   //BufferedReader br = new BufferedReader("/home/ankita/coursera/ml/classification/week1/module-2-assignment-train-idx.json");  
-    	   BufferedReader br1 = new BufferedReader(new FileReader(path));  
-    	   BufferedReader br2 = new BufferedReader(new FileReader(path2));  
+    	  
+    	   if(path.trim() != "")
+    	   {
+    		   Gson gson = new GsonBuilder().create();
+    		   BufferedReader br1 = new BufferedReader(new FileReader(path));  
+    		   train = gson.fromJson(br1, HashSet.class);
+    	   }
+    	   else
+    		   filterRows = false;
+    	  
+    	   if(path2.trim()!= "")
+    	   {
+    		   Gson gson = new GsonBuilder().create();
+    		   BufferedReader br2 = new BufferedReader(new FileReader(path2));  
+    		   test= gson.fromJson(br2,  HashSet.class);
+    		   
+    	   }
+    	   else
+    		   filterRows = false;
+    	  
     	   
+    	   Gson gson = new GsonBuilder().create();
+		   BufferedReader br2 = new BufferedReader(new FileReader("/home/vibhor/coursera/ml classification/week2/important_words.json"));  
+		   importantWords= gson.fromJson(br2,  HashSet.class);
+		   
     			
     	  //Reader reader = new InputStreamReader(MatrixFormulation.class.getResourceAsStream("/home/ankita/coursera/ml/classification/week1/module-2-assignment-train-idx.json"), "UTF-8");
-               Gson gson = new GsonBuilder().create();
-               HashSet<Integer> train = gson.fromJson(br1, HashSet.class);
-               HashSet<Integer> test= gson.fromJson(br2,  HashSet.class);
+              
+             
+              
     		   
     		   //System.out.println(Arrays.toString(p));
                
            int i = 0;
-           br = new BufferedReader(new FileReader("/home/ankita/coursera/ml/classification/week1/amazon_baby.csv"));
+           br = new BufferedReader(new FileReader("/home/vibhor/coursera/ml classification/week2/amazon_baby_subset.csv"));
            String columnNames = br.readLine();
            String [] headings = columnNames.split(cvsSplitBy);
            String[] newHeadings = new String[headings.length +3];
@@ -130,6 +156,7 @@ public class MatrixFormulation {
            newHeadings[headings.length+2] = "wordCount";
            matrixTest.setColumnHeaders(newHeadings);
            matrixTrain.setColumnHeaders(newHeadings);
+           int count = 0;
            //headings = Arrays.copyOfRange(headings, 2, headings.length);
            while ((line = br.readLine()) != null) {
 
@@ -152,6 +179,16 @@ public class MatrixFormulation {
 //              
               // rating.put(i, Integer.parseInt(features[2]));
                features[headings.length] = remove_punctuation(features[1]);
+//               if(features[headings.length].contains("perfect"))
+//               {
+//            	   count++;
+//               }
+//               
+               if ( features[headings.length].toLowerCase().indexOf("perfect") != -1 ) {
+
+            	  count++;
+
+            	}
                int sentimentValue = 0;
                //reviewClean.put(i, cleanReview);
                if(Double.parseDouble(features[2]) >=4)
@@ -164,9 +201,9 @@ public class MatrixFormulation {
             	   sentimentValue = -1;
         	   }
                
-               HashMap<String, Integer> wordCountMap = wordCount(features[headings.length]);
+               HashMap<String, Integer> wordCountMap = wordCount(features[headings.length],importantWords);
                
-               if(train.contains(i))
+               if(!filterRows || train.contains(i))
                {
             	   matrixTrain.name.put(i, features[0]);
             	   matrixTrain.review.put(i, features[1]);
@@ -191,67 +228,18 @@ public class MatrixFormulation {
               
                i++;
            }
+        
+           if(filterRows)
+           {
+               testTrain.put("test", matrixTest);
+   
+           }
+ 
+           System.out.println(count);
            
-            
-//           reviewClone.putAll(review);// = review.p
-//           nameClone.putAll(name);
-//           ratingClone.putAll(rating);
-//           reviewCleanClone.putAll(reviewClean);
-//           sentimentClone.putAll(sentiment);
-//           wordCountClone.putAll(wordCount);
-//           
-//           review.keySet().retainAll(train);
-//           name.keySet().retainAll(train);
-//           rating.keySet().retainAll(train);
-//           reviewClean.keySet().retainAll(train);
-//           sentiment.keySet().retainAll(train);
-//           wordCount.keySet().retainAll(train);
-//           
-//           reviewClone.keySet().retainAll(test);
-//           nameClone.keySet().retainAll(test);
-//           ratingClone.keySet().retainAll(test);
-//           reviewCleanClone.keySet().retainAll(test);
-//           sentimentClone.keySet().retainAll(test);
-//           wordCountClone.keySet().retainAll(test);
-//          
-//           
-//           matrixTest.setColumnHeaders(newHeadings);
-//           matrixTest.setName(nameClone);
-//           matrixTest.setRating(ratingClone);
-//           matrixTest.setReview(reviewClone);
-//           matrixTest.setReviewClean(reviewCleanClone);
-//           matrixTest.setSentiment(sentimentClone);
-//           matrixTest.setWordCount(wordCountClone);
-           
-           
-//           matrixTest.setColumnHeaders(newHeadings);
-//           matrixTrain.setName(name);
-//           matrixTrain.setRating(rating);
-//           matrixTrain.setReview(review);
-//           matrixTrain.setReviewClean(reviewClean);
-//           matrixTrain.setSentiment(sentiment);
-//           matrixTrain.setWordCount(wordCount);
-//           
-           
-          // trainColumns.put("review", review);
-           
-//          for (int j = 0; j < train.length; j++) {
-//        	  //System.out.println(j);
-//			dataTrain.add(data.get(train[j]));
-//		}
-//          
-//          for (int j = 0; j < test.length; j++) {
-//        	  //System.out.println(j);
-//			dataTest.add(data.get(test[j]));
-//		} 
-          //csvMatrixTrain = dataTrain.toArray(new String[dataTrain.size()][]);
-         // csvMatrixTest = dataTest.toArray(new String[dataTest.size()][]);
-          
-           
-           
-            testTrain.put("train", matrixTrain);
-            testTrain.put("test", matrixTest);
+    	   testTrain.put("train", matrixTrain);
 
+           
        } catch (FileNotFoundException e) {
            e.printStackTrace();
        } catch (IOException e) {
@@ -272,21 +260,22 @@ public class MatrixFormulation {
 		
 	}
 	
-	public HashMap<String, Integer> wordCount(String cleanReview)
+	public HashMap<String, Integer> wordCount(String cleanReview, HashSet<String> importantWords)
 	{
 		HashMap<String, Integer> count = new HashMap<String, Integer>();
 		
 		String tokenized[] = cleanReview.split(" ");
 		
 		for (String string : tokenized) {
-			if(string.trim() != "")
+			String trimmedValue = string.trim();
+			if(trimmedValue != "" && importantWords.contains(trimmedValue))
 			{
-				if(count.containsKey(string))
+				if(count.containsKey(trimmedValue))
 				{
-					count.put(string, count.get(string) + 1);
+					count.put(trimmedValue, count.get(trimmedValue) + 1);
 				}
 				else{
-					count.put(string, 1);
+					count.put(trimmedValue, 1);
 				}
 			}
 			
